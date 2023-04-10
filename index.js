@@ -15,11 +15,6 @@ app.use(cors());
 mongoose.set('strictQuery', false);
 dotenv.config();
 
-// mongoose
-//   .connect(process.env.MONGO_URL)
-//   .then(() => console.log("DB Connection Successful"))
-//   .catch((error) => console.log(error));
-
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGO_URL);
