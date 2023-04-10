@@ -8,9 +8,6 @@ const {
   verifyCartOwnerForDelete,
 } = require("./verifyToken");
 
-const sendResponse = (res, data) => res.status(200).json(data);
-const sendError = (res, error) => res.status(500).json(error);
-
 //CREATE
 router.post("/", verifyToken, async (req, res) => {
   const newCart = new Cart(req.body);
@@ -18,9 +15,9 @@ router.post("/", verifyToken, async (req, res) => {
   try {
     const savedCart = await newCart.save();
 
-    sendResponse(res, savedCart);
+    res.status(200).json(savedCart);
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 
@@ -36,9 +33,9 @@ router.put("/:id", verifyCartOwner, async (req, res) => {
       { new: true }
     );
     
-    sendResponse(res, updatedCart);
+    res.status(200).json(updatedCart);
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 
@@ -47,9 +44,9 @@ router.delete("/:id", verifyToken, verifyCartOwnerForDelete, async (req, res) =>
   try {
     await req.cart.remove();
 
-    sendResponse(res, { message: "Cart has been deleted..." });
+    res.status(200).json({ message: "Your cart has been deleted..." });
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 
@@ -58,9 +55,9 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
   try {
     const carts = await Cart.find();
 
-    sendResponse(res, carts);
+    res.status(200).json(carts);
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 
@@ -69,9 +66,9 @@ router.get("/find/:userId", verifyTokenAndAuthorization, async (req, res) => {
   try {
     const cart = await Cart.find({ userId: req.params.userId });
 
-    sendResponse(res, cart);
+    res.status(200).json(cart);
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 

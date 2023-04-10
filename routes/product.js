@@ -4,9 +4,6 @@ const {
   verifyTokenAndAdmin
 } = require("./verifyToken");
 
-const sendResponse = (res, data) => res.status(200).json(data);
-const sendError = (res, error) => res.status(500).json(error);
-
 //CREATE
 router.post("/", verifyTokenAndAdmin, async (req, res) => {
   const newProduct = new Product(req.body);
@@ -14,9 +11,9 @@ router.post("/", verifyTokenAndAdmin, async (req, res) => {
   try {
     const savedProduct = await newProduct.save();
 
-    sendResponse(res, savedProduct);
+    res.status(200).json(savedProduct);
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 
@@ -31,9 +28,9 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
       { new: true }
     );
     
-    sendResponse(res, updatedProduct);
+    res.status(200).json(updatedProduct);
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 
@@ -42,9 +39,9 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
 
-    sendResponse(res, "Product has been deleted...");
+    res.status(200).json({ message: "Your product has been deleted..." });
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 
@@ -68,9 +65,9 @@ router.get("/", async (req, res) => {
       products = await Product.find();
     }
 
-    sendResponse(res, products);
+    res.status(200).json(products);
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 
@@ -79,9 +76,9 @@ router.get("/find/:id", async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
 
-    sendResponse(res, product);
+    res.status(200).json(product);
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 

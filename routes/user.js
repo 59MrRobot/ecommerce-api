@@ -6,9 +6,6 @@ const {
 } = require("./verifyToken");
 const CryptoJS = require("crypto-js");
 
-const sendResponse = (res, data) => res.status(200).json(data);
-const sendError = (res, error) => res.status(500).json(error);
-
 //UPDATE
 router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
   if (req.body.password) {
@@ -27,9 +24,9 @@ router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
       { new: true }
     );
     
-    sendResponse(res, updatedUser);
+    res.status(200).json(updatedUser);
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 
@@ -38,9 +35,9 @@ router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
 
-    sendResponse(res, "User has been deleted...");
+    res.status(200).json({ message: "User has been deleted..." });
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 
@@ -53,9 +50,9 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
       ? await User.find().sort({ _id: -1 }).limit(5)
       : await User.find();
 
-    sendResponse(res, users);
+      res.status(200).json(users);
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 
@@ -66,9 +63,9 @@ router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
 
     const { password, ...others } = user._doc;
 
-    sendResponse(res, others);
+    res.status(200).json(others);
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 
@@ -94,9 +91,9 @@ router.get("/stats", verifyTokenAndAdmin, async (req, res) => {
       },
     ]);
 
-    sendResponse(res, data);
+    res.status(200).json(data);
   } catch (error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 

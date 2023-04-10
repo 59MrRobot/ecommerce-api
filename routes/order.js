@@ -6,9 +6,6 @@ const {
   verifyTokenAndAdmin
 } = require("./verifyToken");
 
-const sendResponse = (res, data) => res.status(200).json(data);
-const sendError = (res, error) => res.status(500).json(error);
-
 //CREATE
 router.post("/", verifyToken, async (req, res) => {
   const newOrder = new Order(req.body);
@@ -16,9 +13,9 @@ router.post("/", verifyToken, async (req, res) => {
   try {
     const savedOrder = await newOrder.save();
 
-    sendResponse(res, savedOrder);
+    res.status(200).json(savedOrder);
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 
@@ -33,9 +30,9 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
       { new: true }
     );
     
-    sendResponse(res, updatedOrder);
+    res.status(200).json(updatedOrder);
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 
@@ -44,9 +41,9 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
     await Order.findByIdAndDelete(req.params.id);
 
-    sendResponse(res, "Order has been cancelled...");
+    res.status(200).json({ message: 'Order has been cancelled...' });
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 
@@ -55,9 +52,9 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
   try {
     const orders = await Order.find();
 
-    sendResponse(res, orders);
+    res.status(200).json(orders);
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 
@@ -66,9 +63,9 @@ router.get("/find/:userId", verifyTokenAndAuthorization, async (req, res) => {
   try {
     const orders = await Order.findOne({ userId: req.params.userId });
 
-    sendResponse(res, orders);
+    res.status(200).json(orders);
   } catch(error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 
@@ -95,9 +92,9 @@ router.get("/income", verifyTokenAndAdmin, async (req, res) => {
       },
     ]);
 
-    sendResponse(res, income);
+    res.status(200).json(income);
   } catch (error) {
-    sendError(res, error);
+    res.status(500).json(error);
   }
 })
 
