@@ -26,6 +26,10 @@ app.use("/api/products", productRoute);
 app.use("/api/carts", cartRoute);
 app.use("/api/orders", orderRoute);
 
+app.get("/", (req, res) => {
+  res.send("Welcome to the eCommerce Rest API");
+});
+
 app.listen(process.env.PORT || 5000, () => {
   console.log("Backend server is running.");
 })
