@@ -71,7 +71,7 @@ router.post("/login", async (req, res) => {
   sendResponse(res, { ...others, accessToken });
   // res.status(200).json({ ...others, accessToken });
   } catch(error) {
-    res.status(500).json(error);
+    // res.status(500).json(error);
   }
 })
 
