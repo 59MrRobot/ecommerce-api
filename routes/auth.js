@@ -6,6 +6,13 @@ const jwt = require("jsonwebtoken");
 
 dotenv.config();
 
+function sendResponse(res, data) {
+  if (!res.headersSent) {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).send(data);
+  }
+}
+
 //REGISTER
 router.post("/register", async (req, res) => {
   const newUser = new User({
@@ -26,7 +33,8 @@ router.post("/register", async (req, res) => {
   try {
     const savedUser = await newUser.save();
 
-    res.status(201).json(savedUser);
+    sendResponse(res, savedUser);
+    // res.status(201).json(savedUser);
   } catch(error) {
     res.status(500).json(error);
   }
@@ -60,7 +68,8 @@ router.post("/login", async (req, res) => {
 
   const { password, ...others } = user._doc;
 
-  res.status(200).json({ ...others, accessToken });
+  sendResponse(res, { ...others, accessToken });
+  // res.status(200).json({ ...others, accessToken });
   } catch(error) {
     res.status(500).json(error);
   }
