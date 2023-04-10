@@ -8,7 +8,8 @@ const productRoute = require("./routes/product");
 const cartRoute = require("./routes/cart");
 const orderRoute = require("./routes/order");
 const cors = require("cors");
-const { MongoClient } = require('mongodb');
+const crypto = require('crypto');
+const nonce = crypto.randomBytes(16).toString('base64');
 
 app.use(cors());
 
@@ -28,6 +29,16 @@ const connectDB = async () => {
 
 app.get("/", (req, res) => {
   res.send("Welcome to the eCommerce Rest API");
+});
+
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", "default-src 'self' http://localhost:5000");
+  next();
+});
+
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", `script-src 'self' 'nonce-${nonce}'`);
+  next();
 });
 
 app.use(express.json());
