@@ -10,6 +10,7 @@ const orderRoute = require("./routes/order");
 const cors = require("cors");
 const crypto = require('crypto');
 const nonce = crypto.randomBytes(16).toString('base64');
+const port = process.env.PORT || 5000;
 
 app.use(cors());
 
@@ -49,7 +50,7 @@ app.use("/api/carts", cartRoute);
 app.use("/api/orders", orderRoute);
 
 connectDB().then(() => {
-  app.listen(process.env.PORT || 5000, () => {
+  app.listen(port, () => {
     console.log("Backend server is running.");
   })
 });
